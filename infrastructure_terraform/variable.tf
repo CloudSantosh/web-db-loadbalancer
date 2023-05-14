@@ -4,13 +4,25 @@ variable "region" {
   description = "It defines region of aws"
 }
 
-/*variable "az" {
-  type        = string
-  default     = "us-west-2a"
+variable "name_prefix" {
+  default     = "AWS-ReStart"
+  description = "Name prefix for resources on AWS"
+}
+
+
+variable "additional_tags" {
+  default     = {}
+  type        = map(string)
+  description = "Additional resource tags"
+}
+
+variable "availability_zone" {
+  type        = list(any)
+  default     = ["us-west-2a", "us-west-2b"]
   description = "defining availibility zone"
 
 }
-*/
+
 variable "cidr_vpc" {
   type        = string
   default     = "192.168.0.0/16"
@@ -92,3 +104,4 @@ variable "instance-type" {
   description = "this is instance type"
 
 }
+

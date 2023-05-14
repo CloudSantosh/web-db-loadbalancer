@@ -24,9 +24,12 @@ resource "aws_security_group" "my_vpc_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags = {
-    Name = "FrontEnd-SG"
-  }
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.name_prefix}-Web-Security"
+    },
+  )
 }
 
 #Create a Security group for Database server
@@ -48,7 +51,10 @@ resource "aws_security_group" "db_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    name = "Backend-SG"
-  }
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.name_prefix}-DB-Security"
+    },
+  )
 }

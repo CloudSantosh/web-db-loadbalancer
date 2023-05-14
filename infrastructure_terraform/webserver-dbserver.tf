@@ -2,12 +2,12 @@
 
 #Create EC2 instances in public subnets
 resource "aws_instance" "Pub2a_ec2" {
-  ami                         = var.ami-id
-  instance_type               = var.instance-type
-  key_name                    = var.keypair-name
-  subnet_id                   = aws_subnet.public_sub2a.id
-  security_groups             = [aws_security_group.my_vpc_sg.id]
-/*
+  ami             = var.ami-id
+  instance_type   = var.instance-type
+  key_name        = var.keypair-name
+  subnet_id       = aws_subnet.public_sub2a.id
+  security_groups = [aws_security_group.my_vpc_sg.id]
+
   user_data = <<-EOF
    #!/bin/bash
     yum update -y
@@ -16,19 +16,21 @@ resource "aws_instance" "Pub2a_ec2" {
     systemctl enable httpd
     echo "<h1>Code finally Worked.EC2 instance launched in us-west-2a!!!</h1>" > var/www/html/index.html
     EOF
-*/
-  tags = {
-    name = "Front-End-webserver-2a"
-  }
-}
 
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.name_prefix}-webserver1"
+    },
+  )
+}
 resource "aws_instance" "Pub2b_ec2" {
-  ami                         = var.ami-id
-  instance_type               = var.instance-type
-  key_name                    = var.keypair-name
-  subnet_id                   = aws_subnet.public_sub2b.id
-  security_groups             = [aws_security_group.my_vpc_sg.id]
-/*
+  ami             = var.ami-id
+  instance_type   = var.instance-type
+  key_name        = var.keypair-name
+  subnet_id       = aws_subnet.public_sub2b.id
+  security_groups = [aws_security_group.my_vpc_sg.id]
+
   user_data = <<-EOF
     #!/bin/bash
     yum update -y
@@ -37,10 +39,13 @@ resource "aws_instance" "Pub2b_ec2" {
     systemctl enable httpd
     echo "<h1>Code finally Worked.EC2 instance launched in us-west-2b!!!</h1>" > var/www/html/index.html
     EOF
-*/
-  tags = {
-    name = "Front-End-webserver-2b"
-  }
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.name_prefix}-webserver2"
+    },
+  )
 }
 /*
   provisioner "remote-exec" {

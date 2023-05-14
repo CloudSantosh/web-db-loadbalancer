@@ -1,6 +1,6 @@
 ---
 - name: installing packages for python env
-  become: yes
+  become: true
   yum:
     name:
       - python3-pip
@@ -10,9 +10,14 @@
     path: ./basic-http-server
     state: directory
 - name: install apache2
-  become: yes
+  become: true
   yum:
     name:
       - httpd
     update_cache: yes
     state: latest
+- name: Start httpd Service
+  become: true
+  service:
+    name: httpd
+    state: started

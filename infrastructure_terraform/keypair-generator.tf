@@ -27,6 +27,6 @@ resource "local_file" "save-key" {
   #changes the mode to readponly mode
   provisioner "local-exec" {
     command = "chmod 400 ${var.keypair-name}.pem"
-    
+
   }
 }
