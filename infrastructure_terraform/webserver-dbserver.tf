@@ -14,7 +14,6 @@ resource "aws_instance" "Pub2a_ec2" {
     yum install -y httpd
     systemctl start httpd
     systemctl enable httpd
-    echo "<h1>Code finally Worked.EC2 instance launched in us-west-2a!!!</h1>" > var/www/html/index.html
     EOF
 
   tags = merge(
@@ -23,7 +22,15 @@ resource "aws_instance" "Pub2a_ec2" {
       Name = "${var.name_prefix}-webserver1"
     },
   )
+  provisioner "local-exec" {
+    command = "echo [all] >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
+  }
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.Pub2a_ec2.public_ip} ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
+  }
+
 }
+
 resource "aws_instance" "Pub2b_ec2" {
   ami             = var.ami-id
   instance_type   = var.instance-type
@@ -37,7 +44,6 @@ resource "aws_instance" "Pub2b_ec2" {
     yum install -y httpd
     systemctl start httpd
     systemctl enable httpd
-    echo "<h1>Code finally Worked.EC2 instance launched in us-west-2b!!!</h1>" > var/www/html/index.html
     EOF
 
   tags = merge(
@@ -46,6 +52,15 @@ resource "aws_instance" "Pub2b_ec2" {
       Name = "${var.name_prefix}-webserver2"
     },
   )
+  /*
+  provisioner "local-exec" {
+    command = "echo [webserver-2] >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
+  }
+*/
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.Pub2b_ec2.public_ip} ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
+    #command = "echo ${aws_instance.Pub2b_ec2.public_ip} ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
+  }
 }
 /*
   provisioner "remote-exec" {
@@ -62,6 +77,7 @@ resource "aws_instance" "Pub2b_ec2" {
     command = "ansible-playbook -i ${aws_instance.Pub2b_ec2.public_ip}, --private-key project-keypair.pem ansible-config-main.yaml"  
   }
 }
+*/
 /*
 # Create a Database instance
 resource "aws_db_instance" "db_instance" {
@@ -78,14 +94,18 @@ resource "aws_db_instance" "db_instance" {
   skip_final_snapshot    = true
 }
 
+resource "time_sleep" "wait_50_seconds" {
+  depends_on       = [aws_db_instance.db_instance]
+  destroy_duration = "50s"
+}
+
 #Create RDS instance subnet group
 resource "aws_db_subnet_group" "db_sub_grp" {
   name       = "db_sub_grp"
   subnet_ids = [aws_subnet.db_private_sub2a.id, aws_subnet.db_private_sub2b.id]
 }
-*/
 
-/*
+
 resource "local_file" "ansible_inventory" {
   content = aws_instance.Pub2a_ec2.public_ip
   filename="${path.module}/inventory" 

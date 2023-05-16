@@ -9,15 +9,15 @@
   file:
     path: ./basic-http-server
     state: directory
-- name: install apache2
+
+- name: Copy files to  remote webservers
   become: true
-  yum:
-    name:
-      - httpd
-    update_cache: yes
-    state: latest
+  copy:
+    src:  website/traveler/
+    dest: /var/www/html
+    
 - name: Start httpd Service
   become: true
   service:
     name: httpd
-    state: started
+    state: restarted

@@ -1,3 +1,5 @@
-[default]
-34.220.102.209 ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem
-52.43.139.21 ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem
+
+[webserver1]
+54.201.243.244 ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem
+[webserver2]
+34.219.128.78 ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem

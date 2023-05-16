@@ -41,3 +41,4 @@ resource "aws_lb_target_group_attachment" "my-aws-alb2" {
   port             = 80
 }
 
+
