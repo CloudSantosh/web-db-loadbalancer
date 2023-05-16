@@ -54,7 +54,7 @@ resource "aws_instance" "Pub2b_ec2" {
   )
 
   provisioner "local-exec" {
-    command = "echo [webserver-2] >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
+    command = "echo [webserver2] >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
   }
 
   provisioner "local-exec" {
