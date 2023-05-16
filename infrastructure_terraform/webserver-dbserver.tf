@@ -23,7 +23,7 @@ resource "aws_instance" "Pub2a_ec2" {
     },
   )
   provisioner "local-exec" {
-    command = "echo [all] >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
+    command = "echo [webserver1] >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
   }
   provisioner "local-exec" {
     command = "echo ${aws_instance.Pub2a_ec2.public_ip} ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
@@ -52,11 +52,11 @@ resource "aws_instance" "Pub2b_ec2" {
       Name = "${var.name_prefix}-webserver2"
     },
   )
-  /*
+
   provisioner "local-exec" {
     command = "echo [webserver-2] >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
   }
-*/
+
   provisioner "local-exec" {
     command = "echo ${aws_instance.Pub2b_ec2.public_ip} ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
     #command = "echo ${aws_instance.Pub2b_ec2.public_ip} ansible_ssh_private_key_file=/Users/santoshji/terraform/web-db-loadbalancer/infrastructure_terraform/project-keypair.pem >> /Users/santoshji/terraform/web-db-loadbalancer/ansible_vm_aws/inventory/vm_aws_playbook/hosts"
@@ -78,7 +78,7 @@ resource "aws_instance" "Pub2b_ec2" {
   }
 }
 */
-/*
+
 # Create a Database instance
 resource "aws_db_instance" "db_instance" {
   allocated_storage      = 10
@@ -105,7 +105,7 @@ resource "aws_db_subnet_group" "db_sub_grp" {
   subnet_ids = [aws_subnet.db_private_sub2a.id, aws_subnet.db_private_sub2b.id]
 }
 
-
+/*
 resource "local_file" "ansible_inventory" {
   content = aws_instance.Pub2a_ec2.public_ip
   filename="${path.module}/inventory" 
