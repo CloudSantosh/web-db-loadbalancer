@@ -45,3 +45,5 @@ webserver_content.md
 
 #ignoring reference file
 How *
+.vscode
+*settings.json

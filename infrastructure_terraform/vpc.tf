@@ -91,8 +91,36 @@ resource "aws_internet_gateway" "my_igw" {
   )
 }
 
+# Elastic IP for NAT
+resource "aws_eip" "eip_for_nat" {
+  vpc = true
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.name_prefix}-eip-nat"
+    },
+  )
+}
+
+# Provison Network Address Translator 
+resource "aws_nat_gateway" "my_nat_gw" {
+  allocation_id = aws_eip.eip_for_nat.id
+  subnet_id     = aws_subnet.public_sub2a.id
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.name_prefix}-my-nat-gw"
+    },
+  )
+  depends_on = [
+    aws_internet_gateway.my_igw
+  ]
+}
+
 #Create Route Table for Public Subnets
-resource "aws_route_table" "my_rt_table" {
+resource "aws_route_table" "my_rt_table_public" {
   vpc_id = aws_vpc.my_vpc.id
 
   route {
@@ -111,10 +139,39 @@ resource "aws_route_table" "my_rt_table" {
 #Associate public subnets with routing table
 resource "aws_route_table_association" "Public_sub1_Route_Association" {
   subnet_id      = aws_subnet.public_sub2a.id
-  route_table_id = aws_route_table.my_rt_table.id
+  route_table_id = aws_route_table.my_rt_table_public.id
 }
 
 resource "aws_route_table_association" "Public_sub2_Route_Association" {
   subnet_id      = aws_subnet.public_sub2b.id
-  route_table_id = aws_route_table.my_rt_table.id
+  route_table_id = aws_route_table.my_rt_table_public.id
+}
+
+
+#Create Route Table for Private Subnets
+resource "aws_route_table" "my_rt_table_private" {
+  vpc_id = aws_vpc.my_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.my_nat_gw.id
+  }
+
+  tags = merge(
+    var.additional_tags,
+    {
+      Name = "${var.name_prefix}-rtb-private"
+    },
+  )
+}
+
+#Associate private subnets with routing table
+resource "aws_route_table_association" "Private_sub1_Route_Association" {
+  subnet_id      = aws_subnet.db_private_sub2a.id
+  route_table_id = aws_route_table.my_rt_table_private.id
+}
+
+resource "aws_route_table_association" "Private_sub2_Route_Association" {
+  subnet_id      = aws_subnet.db_private_sub2b.id
+  route_table_id = aws_route_table.my_rt_table_private.id
 }
