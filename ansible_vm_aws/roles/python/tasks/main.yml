@@ -13,7 +13,8 @@
 - name: Copy files to  remote webservers
   become: true
   copy:
-    src:  website/traveler/
+    src:  website/drool
+    #src:  website/traveler
     dest: /var/www/html
     
 - name: Start httpd Service

@@ -78,7 +78,7 @@ resource "aws_instance" "Pub2b_ec2" {
   }
 }
 */
-
+/*
 # Create a Database instance
 resource "aws_db_instance" "db_instance" {
   allocated_storage      = 10
@@ -105,7 +105,7 @@ resource "aws_db_subnet_group" "db_sub_grp" {
   subnet_ids = [aws_subnet.db_private_sub2a.id, aws_subnet.db_private_sub2b.id]
 }
 
-/*
+
 resource "local_file" "ansible_inventory" {
   content = aws_instance.Pub2a_ec2.public_ip
   filename="${path.module}/inventory" 
